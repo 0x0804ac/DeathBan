@@ -1,0 +1,10 @@
+name: DeathBan
+version: "3.0"
+main: com.nokhoon.deathban.PluginMain
+description: You need to rest... calm down.
+api-version: 1.17
+author: "0x0804ac"
+commands: 
+  respawn:
+    description: manages how long a player should wait for respawn.
+    usage: /respawn (additional|default|get|set) ...
