@@ -132,7 +132,7 @@ public class PluginMain extends JavaPlugin implements Listener {
 			public void run() {
 				String stringDeathMessage = event.getDeathMessage();
 				String banMessage = ChatColor.RED + "죽었습니다!";
-				if(stringDeathMessage != null) banMessage += (" " + stringDeathMessage);				
+				if(stringDeathMessage != null) banMessage += (" " + ChatColor.WHITE + stringDeathMessage);
 				player.kick(deathMessage
 						.append(Component.text(" " + time, NamedTextColor.GRAY)
 						.append(Component.text("초 뒤에 접속할 수 있습니다.", NamedTextColor.RED))));
