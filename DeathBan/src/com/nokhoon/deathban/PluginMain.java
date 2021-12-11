@@ -22,8 +22,8 @@ import net.kyori.adventure.text.format.NamedTextColor;
 public class PluginMain extends JavaPlugin implements Listener {
 	private int timeInitial, timeAdditional;
 	
-	public static final String VALUE_FORMAT = "값은 음이 아닌 정수로, 단위는 초입니다.";
-	public static final String PLAYER_FORMAT = "플레이어는 원하는 플레이어의 이름입니다.";
+	public static final String VALUE_HELP = "값은 음이 아닌 정수로, 단위는 초입니다.";
+	public static final String PLAYER_HELP = "플레이어는 원하는 플레이어의 이름입니다.";
 	
 	private int getPlayerRespawnTime(Player player) {
 		return getConfig().getInt("players." + player.getUniqueId().toString() + ".time", 0);
@@ -155,7 +155,7 @@ public class PluginMain extends JavaPlugin implements Listener {
 						.append(respawnTimeGetMessage(timeAdditional)));
 				else if(args.length > 2) {
 					audience.sendMessage(PluginConstants.error("명령어 사용법: /respawn additional [값]"));
-					audience.sendMessage(PluginConstants.info(VALUE_FORMAT));
+					audience.sendMessage(PluginConstants.info(VALUE_HELP));
 				}
 				else if(!sender.isOp()) audience.sendMessage(PluginConstants.NO_PERMISSION);
 				else try {
@@ -171,7 +171,7 @@ public class PluginMain extends JavaPlugin implements Listener {
 						.append(respawnTimeGetMessage(timeInitial)));
 				else if(args.length > 2) {
 					audience.sendMessage(PluginConstants.error("명령어 사용법: /respawn default [값]"));
-					audience.sendMessage(PluginConstants.info(VALUE_FORMAT));
+					audience.sendMessage(PluginConstants.info(VALUE_HELP));
 				}
 				else if(!sender.isOp()) audience.sendMessage(PluginConstants.NO_PERMISSION);
 				else try {
@@ -187,7 +187,7 @@ public class PluginMain extends JavaPlugin implements Listener {
 			case "get":
 				if(args.length > 2) {
 					audience.sendMessage(PluginConstants.error("명령어 사용법: /respawn get [플레이어]"));
-					audience.sendMessage(PluginConstants.info(PLAYER_FORMAT));
+					audience.sendMessage(PluginConstants.info(PLAYER_HELP));
 				}
 				else {
 					if(args.length == 1) {
@@ -220,7 +220,7 @@ public class PluginMain extends JavaPlugin implements Listener {
 			case "set":
 				if(args.length == 1 || args.length > 3) {
 					audience.sendMessage(PluginConstants.error("명령어 사용법: /respawn set (값) [플레이어]"));
-					audience.sendMessage(PluginConstants.info(PLAYER_FORMAT + ' ' + VALUE_FORMAT));
+					audience.sendMessage(PluginConstants.info(PLAYER_HELP + ' ' + VALUE_HELP));
 				}
 				else if(!sender.isOp()) audience.sendMessage(PluginConstants.NO_PERMISSION);
 				else try {
