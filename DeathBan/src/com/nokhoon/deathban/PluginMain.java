@@ -289,6 +289,6 @@ public class PluginMain extends JavaPlugin implements Listener {
 				return java.util.Collections.emptyList();
 			}
 		}
-		return null;
+		return super.onTabComplete(sender, command, alias, args);
 	}
 }
