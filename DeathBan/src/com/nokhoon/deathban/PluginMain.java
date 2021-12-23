@@ -1,6 +1,8 @@
 package com.nokhoon.deathban;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.ChatColor;
@@ -24,6 +26,7 @@ public class PluginMain extends JavaPlugin implements Listener {
 	
 	public static final String VALUE_HELP = "값은 음이 아닌 정수로, 단위는 초입니다.";
 	public static final String PLAYER_HELP = "플레이어는 원하는 플레이어의 이름입니다.";
+	private static final List<String> FIRST_ARGUMENTS = Arrays.asList("additional", "default", "get", "set");
 	
 	private int getPlayerRespawnTime(Player player) {
 		return getConfig().getInt("players." + player.getUniqueId().toString() + ".time", 0);
@@ -150,7 +153,7 @@ public class PluginMain extends JavaPlugin implements Listener {
 			if(args.length == 0) return false;
 			Audience audience = (Audience) sender;
 			switch(args[0].toLowerCase()) {
-			case "additional":
+			case "additional" -> {
 				if(args.length == 1) audience.sendMessage(PluginConstants.info("현재 리스폰 대기 시간 증가량은")
 						.append(respawnTimeGetMessage(timeAdditional)));
 				else if(args.length > 2) {
@@ -165,8 +168,8 @@ public class PluginMain extends JavaPlugin implements Listener {
 				} catch (NumberFormatException e) {
 					informEnterInteger(sender);
 				}
-				return true;
-			case "default":
+			}
+			case "default" -> {
 				if(args.length == 1) audience.sendMessage(PluginConstants.info("현재 기본 리스폰 대기 시간은")
 						.append(respawnTimeGetMessage(timeInitial)));
 				else if(args.length > 2) {
@@ -183,8 +186,8 @@ public class PluginMain extends JavaPlugin implements Listener {
 				} catch (NumberFormatException e) {
 					informEnterInteger(sender);
 				}
-				return true;
-			case "get":
+			}
+			case "get" -> {
 				if(args.length > 2) {
 					audience.sendMessage(PluginConstants.error("명령어 사용법: /respawn get [플레이어]"));
 					audience.sendMessage(PluginConstants.info(PLAYER_HELP));
@@ -216,8 +219,8 @@ public class PluginMain extends JavaPlugin implements Listener {
 						else informUnknownPlayer(sender);
 					}
 				}
-				return true;
-			case "set":
+			}
+			case "set" -> {
 				if(args.length == 1 || args.length > 3) {
 					audience.sendMessage(PluginConstants.error("명령어 사용법: /respawn set (값) [플레이어]"));
 					audience.sendMessage(PluginConstants.info(PLAYER_HELP + ' ' + VALUE_HELP));
@@ -268,9 +271,24 @@ public class PluginMain extends JavaPlugin implements Listener {
 				} catch (NumberFormatException e) {
 					informEnterInteger(sender);
 				}
-				return true;
 			}
+			default -> { return false; }
+			}
+			return true;
 		}
 		return false;
+	}
+	
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+		if(command.getLabel().equals("respawn")) {
+			if(args.length == 1) {
+				return FIRST_ARGUMENTS.stream().filter(arg -> arg.startsWith(args[0].toLowerCase())).toList();
+			}
+			else if(args.length > 1 && !args[0].equalsIgnoreCase("get")) {
+				return java.util.Collections.emptyList();
+			}
+		}
+		return null;
 	}
 }
