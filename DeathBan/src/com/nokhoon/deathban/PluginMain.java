@@ -40,12 +40,12 @@ public class PluginMain extends JavaPlugin implements Listener {
 				.append(Component.text(" 님이 ", NamedTextColor.WHITE));
 	}
 	private Component respawnTimeGetMessage(int seconds) {
-		if(seconds < 0) return null;
+		if(seconds < 0) return Component.empty();
 		return Component.text(" " + seconds, NamedTextColor.GRAY)
 				.append(Component.text("초입니다.", NamedTextColor.GREEN));
 	}
 	private Component respawnTimeSetMessage(int seconds) {
-		if(seconds < 0) return null;
+		if(seconds < 0) return Component.empty();
 		return Component.text(" " + seconds, NamedTextColor.GRAY)
 				.append(Component.text("초로 설정되었습니다.", NamedTextColor.GREEN));
 	}
@@ -54,7 +54,7 @@ public class PluginMain extends JavaPlugin implements Listener {
 				.append(Component.text("초 증가했습니다.", NamedTextColor.RED));
 		else if(changeInSeconds < 0) return Component.text(" " + (-changeInSeconds), NamedTextColor.GRAY)
 				.append(Component.text("초 감소했습니다.", NamedTextColor.GREEN));
-		else return null;
+		else return Component.empty();
 	}
 	private void informEnterInteger(Audience audience) {
 		audience.sendMessage(PluginConstants.error("음이 아닌 정수를 입력해 주세요."));
@@ -239,7 +239,7 @@ public class PluginMain extends JavaPlugin implements Listener {
 							setPlayerRespawnTime(player, input);
 							audience.sendMessage(PluginConstants.info("당신의 고유 리스폰 대기 시간이")
 									.append(respawnTimeSetMessage(input)));
-							audience.sendMessage(PluginConstants.info("리스폰 대기 시간이")
+							if(input - previous != 0) audience.sendMessage(PluginConstants.info("리스폰 대기 시간이")
 									.append(respawnTimeChangeMessage(input - previous)));
 						}
 						else informEnterPlayer(sender);
@@ -252,7 +252,7 @@ public class PluginMain extends JavaPlugin implements Listener {
 								Audience p = (Audience) player;
 								p.sendMessage(PluginConstants.info("당신의 고유 리스폰 대기 시간이")
 										.append(respawnTimeSetMessage(input)));
-								p.sendMessage(PluginConstants.info("리스폰 대기 시간이")
+								if(input - previous != 0) p.sendMessage(PluginConstants.info("리스폰 대기 시간이")
 										.append(respawnTimeChangeMessage(input - previous)));
 								return true;
 							}
@@ -285,7 +285,8 @@ public class PluginMain extends JavaPlugin implements Listener {
 			if(args.length == 1) {
 				return FIRST_ARGUMENTS.stream().filter(arg -> arg.startsWith(args[0].toLowerCase())).toList();
 			}
-			else if(args.length > 1 && !args[0].equalsIgnoreCase("get")) {
+			else if((!args[0].equalsIgnoreCase("get") || args.length != 2)
+					&& (!args[0].equalsIgnoreCase("set") || args.length != 3)) {
 				return java.util.Collections.emptyList();
 			}
 		}
