@@ -41,19 +41,19 @@ public class PluginMain extends JavaPlugin implements Listener {
 	}
 	private Component respawnTimeGetMessage(int seconds) {
 		if(seconds < 0) return Component.empty();
-		return Component.text(" " + seconds, NamedTextColor.GRAY)
-				.append(Component.text("초입니다.", NamedTextColor.GREEN));
+		return Component.text(" " + formatSeconds(seconds), NamedTextColor.GRAY)
+				.append(Component.text("입니다.", NamedTextColor.GREEN));
 	}
 	private Component respawnTimeSetMessage(int seconds) {
 		if(seconds < 0) return Component.empty();
-		return Component.text(" " + seconds, NamedTextColor.GRAY)
-				.append(Component.text("초로 설정되었습니다.", NamedTextColor.GREEN));
+		return Component.text(" " + formatSeconds(seconds), NamedTextColor.GRAY)
+				.append(Component.text("로 설정되었습니다.", NamedTextColor.GREEN));
 	}
 	private Component respawnTimeChangeMessage(int changeInSeconds) {
-		if(changeInSeconds > 0) return Component.text(" " + changeInSeconds, NamedTextColor.GRAY)
-				.append(Component.text("초 증가했습니다.", NamedTextColor.RED));
-		else if(changeInSeconds < 0) return Component.text(" " + (-changeInSeconds), NamedTextColor.GRAY)
-				.append(Component.text("초 감소했습니다.", NamedTextColor.GREEN));
+		if(changeInSeconds > 0) return Component.text(" " + formatSeconds(changeInSeconds), NamedTextColor.GRAY)
+				.append(Component.text(" 증가했습니다.", NamedTextColor.RED));
+		else if(changeInSeconds < 0) return Component.text(" " + formatSeconds(-changeInSeconds), NamedTextColor.GRAY)
+				.append(Component.text(" 감소했습니다.", NamedTextColor.GREEN));
 		else return Component.empty();
 	}
 	private void informEnterInteger(Audience audience) {
@@ -76,6 +76,11 @@ public class PluginMain extends JavaPlugin implements Listener {
 		((Audience) getServer()).sendMessage(PluginConstants.HEADER_INFO
 				.append(Component.text("리스폰 대기 시간이")
 				.append(respawnTimeChangeMessage(changeInSeconds))));
+	}
+	
+	private String formatSeconds(long seconds) {
+		return java.time.Duration.ofSeconds(seconds).toString().substring(2)
+				.replaceFirst("H", "시간 ").replaceFirst("M", "분 ").replaceFirst("S", "초");
 	}
 	
 	@Override
@@ -104,8 +109,8 @@ public class PluginMain extends JavaPlugin implements Listener {
 				.append(Component.text("서버에 접속했습니다.", NamedTextColor.WHITE)));
 		
 		if(timeInitial > 0) {
-			audience.sendMessage(PluginConstants.warning("조심하세요! 죽으면 " + (timeInitial + getPlayerRespawnTime(player)) + "초 동안 서버에 접속할 수 없습니다."));
-			if(timeAdditional > 0) audience.sendMessage(Component.text("리스폰 대기 시간은 죽을 때마다 " + timeAdditional + "초씩 늘어납니다.", NamedTextColor.YELLOW));
+			audience.sendMessage(PluginConstants.warning("조심하세요! 죽으면 " + formatSeconds(timeInitial + getPlayerRespawnTime(player)) + " 동안 서버에 접속할 수 없습니다."));
+			if(timeAdditional > 0) audience.sendMessage(Component.text("리스폰 대기 시간은 죽을 때마다 " + formatSeconds(timeAdditional) + "씩 늘어납니다.", NamedTextColor.YELLOW));
 		}
 	}
 	
@@ -137,8 +142,8 @@ public class PluginMain extends JavaPlugin implements Listener {
 				String banMessage = ChatColor.RED + "죽었습니다!";
 				if(stringDeathMessage != null) banMessage += (" " + ChatColor.WHITE + stringDeathMessage);
 				player.kick(deathMessage
-						.append(Component.text(" " + time, NamedTextColor.GRAY)
-						.append(Component.text("초 뒤에 접속할 수 있습니다.", NamedTextColor.RED))));
+						.append(Component.text(" " + formatSeconds(time), NamedTextColor.GRAY)
+						.append(Component.text(" 뒤에 접속할 수 있습니다.", NamedTextColor.RED))));
 				getServer().getBanList(Type.NAME).addBan(name, banMessage, date, getDescription().getFullName());
 				getConfig().set("players." + id + ".name", name);
 				if(add > 0) getConfig().set("players." + id + ".time", nextTime);
