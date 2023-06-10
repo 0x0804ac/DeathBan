@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import org.bukkit.ChatColor;
 import org.bukkit.BanList.Type;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -139,12 +138,12 @@ public class PluginMain extends JavaPlugin implements Listener {
 		getServer().getScheduler().runTask(this, new Runnable() {
 			public void run() {
 				String stringDeathMessage = event.getDeathMessage();
-				String banMessage = ChatColor.RED + "죽었습니다!";
-				if(stringDeathMessage != null) banMessage += (" " + ChatColor.WHITE + stringDeathMessage);
+				String banMessage = "죽었습니다!";
+				if(stringDeathMessage != null) banMessage += (" " + stringDeathMessage);
 				player.kick(deathMessage
 						.append(Component.text(" " + formatSeconds(time), NamedTextColor.GRAY)
 						.append(Component.text(" 뒤에 접속할 수 있습니다.", NamedTextColor.RED))));
-				getServer().getBanList(Type.NAME).addBan(name, banMessage, date, getDescription().getFullName());
+				getServer().getBanList(Type.NAME).addBan(name, banMessage, date, getPluginMeta().getDisplayName());
 				getConfig().set("players." + id + ".name", name);
 				if(add > 0) getConfig().set("players." + id + ".time", nextTime);
 				saveConfig();
