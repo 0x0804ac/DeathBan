@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import org.bukkit.BanList.Type;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -126,7 +125,6 @@ public class PluginMain extends JavaPlugin implements Listener {
 	public void onPlayerDeath(PlayerDeathEvent event) {
 		if(timeInitial == 0) return;
 		Player player = event.getEntity();
-		String name = player.getName();
 		String id = player.getUniqueId().toString();
 		Component deathMessage = event.deathMessage() == null ?
 				Component.text("죽었습니다!", NamedTextColor.RED) : event.deathMessage();
@@ -143,8 +141,8 @@ public class PluginMain extends JavaPlugin implements Listener {
 				player.kick(deathMessage
 						.append(Component.text(" " + formatSeconds(time), NamedTextColor.GRAY)
 						.append(Component.text(" 뒤에 접속할 수 있습니다.", NamedTextColor.RED))));
-				getServer().getBanList(Type.NAME).addBan(name, banMessage, date, getPluginMeta().getDisplayName());
-				getConfig().set("players." + id + ".name", name);
+				getServer().getBanList(io.papermc.paper.ban.BanListType.PROFILE).addBan(player.getPlayerProfile(), banMessage, date, getPluginMeta().getDisplayName());
+				getConfig().set("players." + id + ".name", player.getName());
 				if(add > 0) getConfig().set("players." + id + ".time", nextTime);
 				saveConfig();
 			}

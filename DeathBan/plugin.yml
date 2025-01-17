@@ -1,8 +1,8 @@
 name: DeathBan
-version: "3.5"
+version: "3.6"
 main: com.nokhoon.deathban.PluginMain
 description: You need to rest... calm down.
-api-version: "1.20"
+api-version: "1.21"
 author: "0x0804ac"
 commands: 
   respawn:
