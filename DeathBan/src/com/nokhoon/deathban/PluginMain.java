@@ -18,6 +18,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 
 public class PluginMain extends JavaPlugin implements Listener {
 	private int timeInitial, timeAdditional;
@@ -135,7 +136,7 @@ public class PluginMain extends JavaPlugin implements Listener {
 		
 		getServer().getScheduler().runTask(this, new Runnable() {
 			public void run() {
-				String stringDeathMessage = event.getDeathMessage();
+				String stringDeathMessage = PlainTextComponentSerializer.plainText().serialize(deathMessage);
 				String banMessage = "죽었습니다!";
 				if(stringDeathMessage != null) banMessage += (" " + stringDeathMessage);
 				player.kick(deathMessage
