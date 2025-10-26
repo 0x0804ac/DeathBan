@@ -13,6 +13,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerQuitEvent.QuitReason;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import net.kyori.adventure.audience.Audience;
@@ -116,7 +117,7 @@ public class PluginMain extends JavaPlugin implements Listener {
 	@EventHandler
 	public void onPlayerLeave(PlayerQuitEvent event) {
 		Player player = event.getPlayer();
-		if(timeInitial > 0 && player.isDead()) event.quitMessage(playerMessageHeader(player)
+		if(timeInitial > 0 && player.isDead() && event.getReason().equals(QuitReason.KICKED)) event.quitMessage(playerMessageHeader(player)
 				.append(Component.text("잠들었습니다.", NamedTextColor.WHITE)));
 		else event.quitMessage(playerMessageHeader(player)
 				.append(Component.text("서버에서 나갔습니다.", NamedTextColor.WHITE)));
